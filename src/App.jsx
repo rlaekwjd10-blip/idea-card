@@ -3,6 +3,12 @@ import './App.css'
 
 const STORAGE_KEY = 'idea-card:ideas'
 
+const normalizeIdea = (idea) => ({
+  id: idea.id,
+  content: idea.content,
+  likes: Number.isInteger(idea.likes) && idea.likes > 0 ? idea.likes : 0,
+})
+
 const loadStoredIdeas = () => {
   try {
     const storedIdeas = localStorage.getItem(STORAGE_KEY)
@@ -11,12 +17,14 @@ const loadStoredIdeas = () => {
     const parsedIdeas = JSON.parse(storedIdeas)
     if (!Array.isArray(parsedIdeas)) return []
 
-    return parsedIdeas.filter(
-      (idea) =>
-        idea &&
-        typeof idea.id === 'string' &&
-        typeof idea.content === 'string',
-    )
+    return parsedIdeas
+      .filter(
+        (idea) =>
+          idea &&
+          typeof idea.id === 'string' &&
+          typeof idea.content === 'string',
+      )
+      .map(normalizeIdea)
   } catch {
     return []
   }
@@ -42,10 +50,19 @@ function App() {
       {
         id: crypto.randomUUID(),
         content: trimmedText,
+        likes: 0,
       },
       ...currentIdeas,
     ])
     setIdeaText('')
+  }
+
+  const likeIdea = (id) => {
+    setIdeas((currentIdeas) =>
+      currentIdeas.map((idea) =>
+        idea.id === id ? { ...idea, likes: idea.likes + 1 } : idea,
+      ),
+    )
   }
 
   const deleteIdea = (id) => {
@@ -139,17 +156,28 @@ function App() {
               ) : (
                 <>
                   <p>{idea.content}</p>
-                  <div className="card-actions">
-                    <button type="button" onClick={() => startEditing(idea)}>
-                      수정
-                    </button>
+                  <div className="card-footer">
                     <button
-                      className="danger"
+                      className="like-button"
                       type="button"
-                      onClick={() => deleteIdea(idea.id)}
+                      onClick={() => likeIdea(idea.id)}
+                      aria-label={`좋아요 ${idea.likes}개`}
                     >
-                      삭제
+                      <span aria-hidden="true">♥</span>
+                      {idea.likes}
                     </button>
+                    <div className="card-actions">
+                      <button type="button" onClick={() => startEditing(idea)}>
+                        수정
+                      </button>
+                      <button
+                        className="danger"
+                        type="button"
+                        onClick={() => deleteIdea(idea.id)}
+                      >
+                        삭제
+                      </button>
+                    </div>
                   </div>
                 </>
               )}

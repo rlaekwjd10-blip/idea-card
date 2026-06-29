@@ -187,6 +187,13 @@ button:focus-visible {
   min-height: 120px;
 }
 
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .card-actions {
   display: flex;
   flex-wrap: wrap;
@@ -199,6 +206,33 @@ button:focus-visible {
   padding: 0 14px;
   font-size: 15px;
   box-shadow: none;
+}
+
+.like-button {
+  display: inline-flex;
+  min-width: 68px;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  padding: 0 13px;
+  border: 1px solid rgba(251, 113, 133, 0.34);
+  background: rgba(251, 113, 133, 0.12);
+  color: #fecdd3;
+  font-size: 15px;
+  box-shadow: none;
+}
+
+.like-button:hover {
+  background: rgba(251, 113, 133, 0.22);
+  box-shadow: 0 12px 24px rgba(251, 113, 133, 0.14);
+}
+
+.like-button span {
+  color: #fb7185;
+  font-size: 16px;
+  line-height: 1;
 }
 
 button.secondary {
@@ -261,5 +295,15 @@ button.danger:hover {
 
   .input-row {
     grid-template-columns: 1fr;
+  }
+
+  .card-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .like-button,
+  .card-actions button {
+    width: 100%;
   }
 }
