@@ -229,10 +229,24 @@ button:focus-visible {
   box-shadow: 0 12px 24px rgba(251, 113, 133, 0.14);
 }
 
+.like-button.is-liked {
+  border-color: rgba(251, 113, 133, 0.76);
+  background: #fb7185;
+  color: #25040b;
+}
+
+.like-button.is-liked:hover {
+  background: #fda4af;
+}
+
 .like-button span {
   color: #fb7185;
   font-size: 16px;
   line-height: 1;
+}
+
+.like-button.is-liked span {
+  color: #25040b;
 }
 
 button.secondary {

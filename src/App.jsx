@@ -3,11 +3,16 @@ import './App.css'
 
 const STORAGE_KEY = 'idea-card:ideas'
 
-const normalizeIdea = (idea) => ({
-  id: idea.id,
-  content: idea.content,
-  likes: Number.isInteger(idea.likes) && idea.likes > 0 ? idea.likes : 0,
-})
+const normalizeIdea = (idea) => {
+  const liked = idea.liked === true
+
+  return {
+    id: idea.id,
+    content: idea.content,
+    liked,
+    likes: liked ? 1 : 0,
+  }
+}
 
 const loadStoredIdeas = () => {
   try {
@@ -50,6 +55,7 @@ function App() {
       {
         id: crypto.randomUUID(),
         content: trimmedText,
+        liked: false,
         likes: 0,
       },
       ...currentIdeas,
@@ -57,11 +63,18 @@ function App() {
     setIdeaText('')
   }
 
-  const likeIdea = (id) => {
+  const toggleLike = (id) => {
     setIdeas((currentIdeas) =>
-      currentIdeas.map((idea) =>
-        idea.id === id ? { ...idea, likes: idea.likes + 1 } : idea,
-      ),
+      currentIdeas.map((idea) => {
+        if (idea.id !== id) return idea
+
+        const liked = !idea.liked
+        return {
+          ...idea,
+          liked,
+          likes: liked ? 1 : 0,
+        }
+      }),
     )
   }
 
@@ -158,10 +171,15 @@ function App() {
                   <p>{idea.content}</p>
                   <div className="card-footer">
                     <button
-                      className="like-button"
+                      className={`like-button ${idea.liked ? 'is-liked' : ''}`}
                       type="button"
-                      onClick={() => likeIdea(idea.id)}
-                      aria-label={`좋아요 ${idea.likes}개`}
+                      onClick={() => toggleLike(idea.id)}
+                      aria-pressed={idea.liked}
+                      aria-label={
+                        idea.liked
+                          ? `좋아요 취소, 현재 ${idea.likes}개`
+                          : `좋아요, 현재 ${idea.likes}개`
+                      }
                     >
                       <span aria-hidden="true">♥</span>
                       {idea.likes}
