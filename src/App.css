@@ -140,6 +140,16 @@ button:focus-visible {
   margin-top: 24px;
 }
 
+.error-message {
+  margin: 14px 0 0;
+  border: 1px solid rgba(251, 113, 133, 0.3);
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: rgba(127, 29, 29, 0.32);
+  color: #fecdd3;
+  font-size: 15px;
+}
+
 .idea-card,
 .empty-state {
   border: 1px solid rgba(148, 163, 184, 0.18);
